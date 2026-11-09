@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShopNow — Checkout</title>
+  <link rel="stylesheet" href="CSS/styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <h1 class="logo">ShopNow</h1>
+    <nav class="main-nav">
+      <a href="index.html">Home</a>
+      <a href="products.html">Products</a>
+      <a href="about.html">About</a>
+      <a href="cart.html">Cart</a>
+      <span id="auth-nav-slot"></span>
+    </nav>
+  </header>
+
+  <main>
+    <h1>Checkout</h1>
+
+    <h3>Order Summary</h3>
+    <div id="checkout-summary"></div>
+    <h3>
+      Total: AED <span id="checkout-total">0.00</span>
+    </h3>
+
+    <form id="checkout-form">
+      <h3>Shipping Information</h3>
+
+      <label for="name">Full Name</label>
+      <input type="text" id="name">
+
+      <label for="address">Address</label>
+      <textarea id="address"></textarea>
+
+      <label for="phone">Phone</label>
+      <input type="text" id="phone" placeholder="+971 50 123 4567">
+
+      <button type="submit">Place Order</button>
+    </form>
+  </main>
+
+  <footer class="site-footer"><p>&copy; 2025 ShopNow.</p></footer>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4"></script>
+  <script src="JS/app.js"></script>
+
+  <script>
+    requireLogin();
+  </script>
+</body>
+</html>
