@@ -172,6 +172,94 @@ if (sortSelect) {
 // Start loading
 loadProducts();
 
+// Smart search..............................................................
+// Scores each product by how many query words appear in its name,
+// description or category. Plain keyword matching, not AI.
+function scoreProduct(product, queryWords) {
+
+    const text = `${product.name} ${product.description || ""} ${product.category?.category_name || ""}`
+        .toLowerCase();
+
+    let score = 0;
+
+    queryWords.forEach(word => {
+        if (text.includes(word)) score += 1;
+    });
+
+    return score;
+}
+
+// "under 500" / "below 500" -> 500
+function extractMaxPrice(query) {
+
+    const match = query.match(/under\s+(\d+)|below\s+(\d+)/i);
+
+    if (!match) return null;
+
+    return Number(match[1] || match[2]);
+}
+
+function smartSearch(query, products) {
+
+    const maxPrice = extractMaxPrice(query);
+
+    let candidates = maxPrice
+        ? products.filter(p => p.price <= maxPrice)
+        : products;
+
+    // the price phrase is a filter, not a search word
+    const queryWords = query
+        .replace(/(under|below)\s+\d+/gi, " ")
+        .toLowerCase()
+        .split(/\s+/)
+        .filter(w => w.length > 2);
+
+    if (queryWords.length === 0) {
+
+        if (!maxPrice) return [];
+
+        // only a price was typed: show the cheapest products under it
+        return [...candidates]
+            .sort((a, b) => a.price - b.price)
+            .slice(0, 5);
+    }
+
+    return candidates
+        .map(p => ({ product: p, score: scoreProduct(p, queryWords) }))
+        .filter(r => r.score > 0)
+        .sort((a, b) => b.score - a.score)
+        .slice(0, 5)
+        .map(r => r.product);
+}
+
+const smartSearchBox = document.getElementById("smart-search");
+
+if (smartSearchBox) {
+
+    smartSearchBox.addEventListener("input", e => {
+
+        const query = e.target.value.trim();
+        const resultsDiv = document.getElementById("smart-results");
+
+        if (query.length < 3) {
+            resultsDiv.innerHTML = "";
+            return;
+        }
+
+        const matches = smartSearch(query, allProducts);
+
+        resultsDiv.innerHTML = matches.length
+            ? matches.map(p => `
+                <p>
+                    <a href="product-detail.html?id=${p.product_id}">${p.name}</a>
+                    — AED ${Number(p.price).toFixed(2)}
+                    <span class="muted">(${p.category?.category_name ?? ""})</span>
+                </p>
+            `).join("")
+            : "<p>No matches. Try different words.</p>";
+    });
+}
+
 // cart shopping code
 function getCart() {
     return JSON.parse(

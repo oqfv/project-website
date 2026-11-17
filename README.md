@@ -7,7 +7,7 @@ database and user accounts.
 | Page | What it does |
 |---|---|
 | `index.html` | Home page with featured products |
-| `products.html` | Full catalogue with search, category filter and price sorting |
+| `products.html` | Full catalogue with search, category filter and price sorting, plus a smart search that scores products against loose queries like "accessories under 200" |
 | `product-detail.html` | Details for one product |
 | `cart.html` | Shopping cart stored in localStorage |
 | `register.html` / `login.html` | Sign-up and login with Supabase Auth |
