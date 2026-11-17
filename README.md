@@ -17,8 +17,12 @@ database and user accounts.
 ## Database (Supabase)
 Tables: `category`, `product`, `customer`, `orderr`, `order_item`.
 
-SQL scripts are in [`sql/`](sql/):
+SQL scripts are in [`sql/`](sql/). To build the database from scratch, run `schema.sql`, then `catalogue.sql`, then `sample-orders.sql`.
+- [`schema.sql`](sql/schema.sql): all tables, indexes, row-level security policies and API permissions
+- [`catalogue.sql`](sql/catalogue.sql): categories, products and sample customers
 - [`checkout-orders.sql`](sql/checkout-orders.sql): orders linked to logged-in users, row-level security, order-status updates
+- [`analytics.sql`](sql/analytics.sql): sales KPIs (revenue, orders, customers, top products, revenue by category, monthly trend, order status)
+- [`sample-orders.sql`](sql/sample-orders.sql): adds sample orders (June–November) for the analytics dashboard, with a statement to remove them
 
 ## Checkout and orders
 
